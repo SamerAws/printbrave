@@ -97,27 +97,29 @@ export default function Navbar() {
         {menuOpen && (
           <div className="bg-zinc-950 border-t border-zinc-800 px-4 py-4 flex flex-col gap-4">
 
-            <Link href="/">الرئيسية</Link>
+            <Link href="/" onClick={() => setMenuOpen(false)}>
+  الرئيسية
+</Link>
 
-            <Link href="/auth">
-              حسابي
-            </Link>
+            <Link href="/auth" onClick={() => setMenuOpen(false)}>
+  حسابي
+</Link>
 
-            <Link href="/shop">
-              المتجر
-            </Link>
+            <Link href="/shop" onClick={() => setMenuOpen(false)}>
+  المتجر
+</Link>
 
-            <Link href="/orders">
-              طلباتي
-            </Link>
+            <Link href="/orders" onClick={() => setMenuOpen(false)}>
+  طلباتي
+</Link>
 
-            <Link href="/upload">
-              اطلب تصميم خاص
-            </Link>
+            <Link href="/upload" onClick={() => setMenuOpen(false)}>
+  اطلب تصميم خاص
+</Link>
 
-            <Link href="/contact">
-              تواصل
-            </Link>
+            <Link href="/contact" onClick={() => setMenuOpen(false)}>
+  تواصل
+</Link>
 
           </div>
         )}
