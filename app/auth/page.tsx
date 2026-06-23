@@ -1,5 +1,5 @@
-
 import Link from "next/link";
+import { sendVerificationCode } from "./actions";
 
 export default function AuthPage() {
   return (
@@ -16,9 +16,13 @@ export default function AuthPage() {
             سجل الدخول للوصول إلى طلباتك السابقة وإدارة حسابك.
           </p>
 
-          <form className="space-y-4 mb-8">
+          <form
+            action={sendVerificationCode}
+            className="space-y-4 mb-8"
+          >
 
             <input
+              name="email"
               type="email"
               placeholder="البريد الإلكتروني"
               className="w-full bg-zinc-800 p-4 rounded-xl"
