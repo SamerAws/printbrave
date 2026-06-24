@@ -1,4 +1,5 @@
 "use server";
+
 import { cookies } from "next/headers";
 import { prisma } from "../lib/prisma";
 import { redirect } from "next/navigation";
@@ -19,10 +20,6 @@ createdAt: "desc",
 },
 });
 
-console.log("EMAIL:", email);
-console.log("CODE:", code);
-console.log("LATEST CODE:", latestCode);
-
 if (!latestCode) {
 redirect(
 `/verify?email=${encodeURIComponent(email)}&error=1`
@@ -35,13 +32,27 @@ redirect(
 );
 }
 
+let user = await prisma.user.findUnique({
+where: {
+email,
+},
+});
+
+if (!user) {
+user = await prisma.user.create({
+data: {
+email,
+},
+});
+}
+
 const cookieStore = await cookies();
 
 cookieStore.set("userEmail", email, {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  maxAge: 60 * 60 * 24 * 30,
-  path: "/",
+httpOnly: true,
+secure: process.env.NODE_ENV === "production",
+maxAge: 60 * 60 * 24 * 30,
+path: "/",
 });
 
 redirect("/orders");

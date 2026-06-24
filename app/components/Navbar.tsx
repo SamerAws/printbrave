@@ -120,7 +120,12 @@ export default function Navbar() {
             <Link href="/contact" onClick={() => setMenuOpen(false)}>
   تواصل
 </Link>
-
+<Link
+  href="/logout"
+  className="hover:text-orange-500"
+>
+  تسجيل الخروج
+</Link>
           </div>
         )}
 
