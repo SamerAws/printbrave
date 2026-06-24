@@ -1,5 +1,5 @@
 "use server";
-
+import { cookies } from "next/headers";
 import { prisma } from "../lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -34,6 +34,15 @@ redirect(
 `/verify?email=${encodeURIComponent(email)}&error=1`
 );
 }
+
+const cookieStore = await cookies();
+
+cookieStore.set("userEmail", email, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  maxAge: 60 * 60 * 24 * 30,
+  path: "/",
+});
 
 redirect("/orders");
 }
