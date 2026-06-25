@@ -14,9 +14,8 @@
     "jsx": "react-jsx",
     "incremental": true,
 
-    
     "baseUrl": ".",
-    
+
     "plugins": [
       {
         "name": "next"

@@ -1,7 +1,7 @@
-
 "use server";
 
 import { prisma } from "../lib/prisma";
+import { cookies } from "next/headers";
 
 export async function createOrder(formData: FormData) {
   const customer = formData.get("customer") as string;
@@ -15,6 +15,23 @@ export async function createOrder(formData: FormData) {
   const notes = formData.get("notes") as string;
   const total = Number(formData.get("total"));
 
+  const cookieStore = await cookies();
+  const email = cookieStore.get("userEmail")?.value;
+
+  let userId: number | null = null;
+
+  if (email) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (user) {
+      userId = user.id;
+    }
+  }
+
   await prisma.order.create({
     data: {
       customer,
@@ -25,6 +42,7 @@ export async function createOrder(formData: FormData) {
       product,
       notes,
       total,
+      userId,
     },
   });
 }

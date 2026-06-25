@@ -3,55 +3,47 @@
 import { prisma } from "@/app/lib/prisma";
 import { cookies } from "next/headers";
 
-export async function createOrder(
-formData: FormData
-) {
-const customer =
-formData.get("customer") as string;
+export async function createOrder(formData: FormData) {
+  const customer = formData.get("customer") as string;
+  const phone = formData.get("phone") as string;
+  const governorate = formData.get("governorate") as string;
+  const product = formData.get("product") as string;
+  const notes = formData.get("notes") as string;
 
-const phone =
-formData.get("phone") as string;
+  const cookieStore = await cookies();
 
-const governorate =
-formData.get("governorate") as string;
+  const email = cookieStore.get("userEmail")?.value;
 
-const product =
-formData.get("product") as string;
+  console.log("EMAIL =", email);
 
-const notes =
-formData.get("notes") as string;
+  let userId: number | null = null;
 
-const cookieStore = await cookies();
+  if (email) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
 
-const email =
-cookieStore.get("userEmail")?.value;
+    console.log("USER =", user);
 
-let userId: number | null = null;
+    if (user) {
+      userId = user.id;
+    }
+  }
 
-if (email) {
-const user =
-await prisma.user.findUnique({
-where: {
-email,
-},
-});
+  console.log("USER ID =", userId);
 
+  await prisma.order.create({
+    data: {
+      customer,
+      phone,
+      governorate,
+      product,
+      notes,
+      userId,
+    },
+  });
 
-if (user) {
-  userId = user.id;
-}
-
-
-}
-
-await prisma.order.create({
-data: {
-customer,
-phone,
-governorate,
-product,
-notes,
-userId,
-},
-});
+  console.log("ORDER CREATED");
 }

@@ -216,7 +216,7 @@ const media = await prisma.productMedia.findMany({
                   </a>
 
                   <form
-                    action={async () => {
+  action={async () => {
                       "use server";
                       await deleteProduct(product.id);
                     }}
@@ -253,59 +253,16 @@ const media = await prisma.productMedia.findMany({
                 key={order.id}
                 className="bg-zinc-800 p-4 rounded-xl"
               >
-                
-{orders.map((order) => (
-  <div
-    key={order.id}
-    className="bg-zinc-800 p-4 rounded-xl"
-  >
-    <p>
-      <strong>الاسم:</strong> {order.customer}
-    </p>
+                <p><strong>الاسم:</strong> {order.customer}</p>
+                <p><strong>الهاتف:</strong> {order.phone}</p>
+                <p><strong>المحافظة:</strong> {order.governorate}</p>
+                <p><strong>الملاحظات:</strong> {order.notes || "-"}</p>
+                <p><strong>الإجمالي:</strong> {order.total.toLocaleString()} د.ع</p>
+                <p><strong>المنتجات:</strong></p>
 
-    <p>
-      <strong>الهاتف:</strong> {order.phone}
-    </p>
-
-    <p>
-      <strong>المحافظة:</strong> {order.governorate}
-    </p>
-
-    <p>
-      <strong>الملاحظات:</strong>{" "}
-      {order.notes || "-"}
-    </p>
-
-    <p>
-      <strong>الإجمالي:</strong>{" "}
-      {order.total.toLocaleString()} د.ع
-    </p>
-
-    <p>
-      <strong>المنتجات:</strong>
-    </p>
-
-    <pre className="whitespace-pre-wrap text-zinc-300">
-      {order.product}
-    </pre>
-
-    <form
-      action={async () => {
-        "use server";
-        await deleteOrder(order.id);
-      }}
-      className="mt-3"
-    >
-      <button
-        type="submit"
-        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
-      >
-        حذف الطلب
-      </button>
-    </form>
-  </div>
-))}
-
+                <pre className="whitespace-pre-wrap text-zinc-300">
+                  {order.product}
+                </pre>
 
                 <form
                   action={async () => {

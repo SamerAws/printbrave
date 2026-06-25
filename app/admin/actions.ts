@@ -30,11 +30,15 @@ export async function deleteProduct(id: number) {
 }
 
 export async function deleteOrder(id: number) {
+  console.log("DELETE ORDER ID:", id);
+
   await prisma.order.delete({
     where: {
       id,
     },
   });
+
+  console.log("DELETED");
 }
 
 export async function updateProduct(
