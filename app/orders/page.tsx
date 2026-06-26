@@ -1,14 +1,21 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { prisma } from "../lib/prisma";
 
 export default async function OrdersPage() {
   const cookieStore = await cookies();
+  const headerStore = await headers();
 
   const email = cookieStore.get("userEmail")?.value;
-console.log("===== COOKIES =====");
-console.log(cookieStore.getAll());
-console.log("Current email:", email);
+
+  console.log("========== REQUEST ==========");
+  console.log("Host:", headerStore.get("host"));
+  console.log("Origin:", headerStore.get("origin"));
+  console.log("Cookie Header:", headerStore.get("cookie"));
+  console.log("All Cookies:", cookieStore.getAll());
+  console.log("Current email:", email);
+  console.log("=============================");
+
   if (!email) {
     return (
       <main className="min-h-screen bg-black text-white py-20">
@@ -57,21 +64,20 @@ console.log("Current email:", email);
   }
 
   const orders = await prisma.order.findMany({
-  where: {
-    userId: user.id,
-  },
-  include: {
-    items: true,
-  },
-  orderBy: {
-    id: "desc",
-  },
-});
+    where: {
+      userId: user.id,
+    },
+    include: {
+      items: true,
+    },
+    orderBy: {
+      id: "desc",
+    },
+  });
 
   return (
     <main className="min-h-screen bg-black text-white py-20">
       <div className="max-w-4xl mx-auto px-6">
-
         <h1 className="text-4xl font-bold mb-8">
           طلباتي
         </h1>
@@ -91,8 +97,6 @@ console.log("Current email:", email);
                 key={order.id}
                 className="bg-zinc-900 p-6 rounded-2xl"
               >
-                
-
                 <p>
                   <strong>الاسم:</strong> {order.customer}
                 </p>
@@ -115,33 +119,34 @@ console.log("Current email:", email);
                 </p>
 
                 <div className="mt-5 space-y-4">
-  {order.items.map((item) => (
-    <div
-      key={item.id}
-      className="flex items-center gap-4 bg-zinc-800 p-4 rounded-xl"
-    >
-      <img
-        src={item.productImage || "/placeholder.png"}
-        alt={item.productName}
-        className="w-20 h-20 rounded-xl object-cover"
-      />
+                  {order.items.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-4 bg-zinc-800 p-4 rounded-xl"
+                    >
+                      <img
+                        src={item.productImage || "/placeholder.png"}
+                        alt={item.productName}
+                        className="w-20 h-20 rounded-xl object-cover"
+                      />
 
-      <div className="flex-1">
-        <h3 className="font-bold text-lg">
-          {item.productName}
-        </h3>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-lg">
+                          {item.productName}
+                        </h3>
 
-        <p className="text-zinc-400">
-          الكمية: {item.quantity}
-        </p>
+                        <p className="text-zinc-400">
+                          الكمية: {item.quantity}
+                        </p>
 
-        <p className="text-orange-500 font-bold">
-          {item.price.toLocaleString()} د.ع
-        </p>
-      </div>
-    </div>
-  ))}
-</div>
+                        <p className="text-orange-500 font-bold">
+                          {item.price.toLocaleString()} د.ع
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
               </div>
             ))}
           </div>
