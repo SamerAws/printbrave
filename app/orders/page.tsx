@@ -6,7 +6,9 @@ export default async function OrdersPage() {
   const cookieStore = await cookies();
 
   const email = cookieStore.get("userEmail")?.value;
-
+console.log("===== COOKIES =====");
+console.log(cookieStore.getAll());
+console.log("Current email:", email);
   if (!email) {
     return (
       <main className="min-h-screen bg-black text-white py-20">
