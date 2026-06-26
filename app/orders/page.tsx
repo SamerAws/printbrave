@@ -55,13 +55,16 @@ export default async function OrdersPage() {
   }
 
   const orders = await prisma.order.findMany({
-    where: {
-      userId: user.id,
-    },
-    orderBy: {
-      id: "desc",
-    },
-  });
+  where: {
+    userId: user.id,
+  },
+  include: {
+    items: true,
+  },
+  orderBy: {
+    id: "desc",
+  },
+});
 
   return (
     <main className="min-h-screen bg-black text-white py-20">
@@ -86,9 +89,7 @@ export default async function OrdersPage() {
                 key={order.id}
                 className="bg-zinc-900 p-6 rounded-2xl"
               >
-                <p>
-                  <strong>رقم الطلب:</strong> {order.id}
-                </p>
+                
 
                 <p>
                   <strong>الاسم:</strong> {order.customer}
@@ -111,13 +112,34 @@ export default async function OrdersPage() {
                   {order.total.toLocaleString()} د.ع
                 </p>
 
-                <p className="mt-4 font-bold">
-                  المنتجات:
-                </p>
+                <div className="mt-5 space-y-4">
+  {order.items.map((item) => (
+    <div
+      key={item.id}
+      className="flex items-center gap-4 bg-zinc-800 p-4 rounded-xl"
+    >
+      <img
+        src={item.productImage || "/placeholder.png"}
+        alt={item.productName}
+        className="w-20 h-20 rounded-xl object-cover"
+      />
 
-                <pre className="whitespace-pre-wrap text-zinc-300">
-                  {order.product}
-                </pre>
+      <div className="flex-1">
+        <h3 className="font-bold text-lg">
+          {item.productName}
+        </h3>
+
+        <p className="text-zinc-400">
+          الكمية: {item.quantity}
+        </p>
+
+        <p className="text-orange-500 font-bold">
+          {item.price.toLocaleString()} د.ع
+        </p>
+      </div>
+    </div>
+  ))}
+</div>
               </div>
             ))}
           </div>

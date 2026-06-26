@@ -60,9 +60,9 @@ async function handleSubmit(
         </h1>
 
         <form
-          action={handleSubmit}
-          className="bg-zinc-900 p-6 rounded-2xl space-y-4"
-        >
+  onSubmit={() => console.log("FORM SUBMITTED")}
+  action={handleSubmit}>
+    
           <input
             name="customer"
             type="text"
@@ -132,10 +132,23 @@ async function handleSubmit(
           />
 
           <input
-            type="hidden"
-            name="product"
-            value={productsText}
-          />
+  type="hidden"
+  name="product"
+  value={productsText}
+/>
+
+<input
+  type="hidden"
+  name="cart"
+  value={JSON.stringify(
+    cart.map((item) => ({
+      productId: item.id,
+      quantity: item.quantity,
+    }))
+  )}
+/>
+
+          
 
           <textarea
             name="notes"

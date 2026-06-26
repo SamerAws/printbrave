@@ -18,6 +18,8 @@ model Product {
 
   media ProductMedia[]
 
+  orderItems OrderItem[]
+
   createdAt DateTime @default(now())
 }
 
@@ -42,20 +44,41 @@ model User {
 }
 
 model Order {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   customer    String
   phone       String
   governorate String
   area        String?
   landmark    String?
-  product     String
-  notes       String?
-  total       Int     @default(0)
 
-  status String @default("طلب جديد")
+  product     String   
+
+  notes       String?
+  total       Int      @default(0)
+
+  status String @default("قيد المراجعة")
 
   userId Int?
   user   User? @relation(fields: [userId], references: [id])
+
+  items OrderItem[]
+
+  createdAt DateTime @default(now())
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+
+  orderId Int
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId Int
+  product Product @relation(fields: [productId], references: [id])
+
+  productName String
+  productImage String?
+  price Int
+  quantity Int @default(1)
 
   createdAt DateTime @default(now())
 }

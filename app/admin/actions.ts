@@ -32,6 +32,12 @@ export async function deleteProduct(id: number) {
 export async function deleteOrder(id: number) {
   console.log("DELETE ORDER ID:", id);
 
+  await prisma.orderItem.deleteMany({
+    where: {
+      orderId: id,
+    },
+  });
+
   await prisma.order.delete({
     where: {
       id,
