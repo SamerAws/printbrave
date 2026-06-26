@@ -20,7 +20,8 @@ const cart = JSON.parse(
 );
   const cookieStore = await cookies();
   const email = cookieStore.get("userEmail")?.value;
-
+console.log("ORDER EMAIL:", email);
+console.log("ORDER COOKIES:", cookieStore.getAll());
   let userId: number | null = null;
 
   if (email) {
