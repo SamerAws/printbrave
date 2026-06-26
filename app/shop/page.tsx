@@ -4,10 +4,12 @@ import ShopClient from "../components/ShopClient";
 
 export default async function ShopPage() {
   const products = await prisma.product.findMany({
-    orderBy: {
-      id: "desc",
-    },
-  });
+  orderBy: {
+    id: "desc",
+  },
+});
+
+console.log("SHOP PRODUCTS:", products);
 
   return (
     <main className="min-h-screen bg-black text-white py-20">
@@ -21,6 +23,7 @@ export default async function ShopPage() {
           <p className="text-center text-zinc-400">
             لا توجد منتجات حالياً
           </p>
+          console.log("Products:", products);
         ) : (
           <ShopClient products={products as any[]} />
         )}
