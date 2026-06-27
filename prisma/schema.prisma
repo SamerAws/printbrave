@@ -39,7 +39,7 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   createdAt DateTime @default(now())
-
+  sessions Session[]
   orders Order[]
 }
 
@@ -94,4 +94,16 @@ model Admin {
   id       Int    @id @default(autoincrement())
   username String @unique
   password String
+}
+model Session {
+  id        Int      @id @default(autoincrement())
+
+  token     String   @unique
+
+  userId    Int
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
 }
